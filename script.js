@@ -14,7 +14,7 @@ The seach city will also be saved below the search box available to be clicked l
 
 When the page is reloaded
 Then all of the saved searches will appear and the last search will be presented*/
-
+var date = moment().format("MMM Do YYYY"); 
 
 var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
 
@@ -23,7 +23,7 @@ var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
 $("#search-button").on("click", function(event){
     event.preventDefault()
     var cityName = $("#input-city").val();
-    console.log(cityName);
+   
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
 
     // Here we run our AJAX call to the OpenWeatherMap API
@@ -35,10 +35,9 @@ $("#search-button").on("click", function(event){
       .then(function(response) {
         // Log the queryURL
         console.log(response);
-    
-        // // Log the resulting object
-        // console.log(response);
-    
+        var cityDisplay = response.name;
+        
+        $("#weather-day").append($("<h2>").text(cityDisplay + " - " + date));
         // // Transfer content to HTML
         // $(".city").html("<h1>" + response.name + " Weather Details</h1>");
         // $(".wind").text("Wind Speed: " + response.wind.speed);
