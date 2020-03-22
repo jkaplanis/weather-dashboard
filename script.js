@@ -30,10 +30,11 @@ $("#search-button").on("click", function (event) {
     })
         // We store all of the retrieved data inside of an object called "response"
         .then(function (response) {
+            console.log(response)
             // assign values from API call to variables
             var cityDisplay = response.name;
             var iconCode = response.weather[0].icon;
-            var iconUrl = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+            var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
             var humidity = response.main.humidity;
             var windSpeed = (response.wind.speed * 2.237);
             var temp = (response.main.temp - 273.15) * 1.8 + 32;
