@@ -14,45 +14,53 @@ The seach city will also be saved below the search box available to be clicked l
 
 When the page is reloaded
 Then all of the saved searches will appear and the last search will be presented*/
-var date = moment().format("MMM Do YYYY"); 
+var date = moment().format("MMM Do YYYY");
 
 var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
 
 // Here we are building the URL we need to query the database
 
-$("#search-button").on("click", function(event){
+$("#search-button").on("click", function (event) {
     event.preventDefault()
     var cityName = $("#input-city").val();
-   
+
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
 
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
-      url: queryURL,
-      method: "GET"
+        url: queryURL,
+        method: "GET"
     })
-      // We store all of the retrieved data inside of an object called "response"
-      .then(function(response) {
-        // Log the queryURL
-        console.log(response);
-        var cityDisplay = response.name;
-        
-        $("#weather-day").append($("<h2>").text(cityDisplay + " - " + date));
-        // // Transfer content to HTML
-        // $(".city").html("<h1>" + response.name + " Weather Details</h1>");
-        // $(".wind").text("Wind Speed: " + response.wind.speed);
-        // $(".humidity").text("Humidity: " + response.main.humidity);
-    
-        // // Convert the temp to fahrenheit
-        // var tempF = (response.main.temp - 273.15) * 1.8 + 32;
-    
-        // // add temp content to html
-        // $(".temp").text("Temperature (K) " + response.main.temp);
-        // $(".tempF").text("Temperature (F) " + tempF.toFixed(2));
-    
-        // // Log the data in the console as well
-        // console.log("Wind Speed: " + response.wind.speed);
-        // console.log("Humidity: " + response.main.humidity);
-        // console.log("Temperature (F): " + tempF);
-      });
+        // We store all of the retrieved data inside of an object called "response"
+        .then(function (response) {
+            console.log(response)
+            var cityDisplay = response.name;
+            var iconCode = response.weather[0].icon;
+            var iconUrl = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+            var humidity = response.main.humidity;
+            var windSpeed = (parseFloat(response.wind.speed) * 2.237);
+
+
+            $("#weather-day").text(cityDisplay + " - " + date);
+            $("#weather-icon").attr("src", iconUrl);
+            $("#current-humidity").text(humidity);
+            $("#current-wind").text(windSpeed);
+            $("#weather-div").attr("class", "col-8 d-block")
+            // // Transfer content to HTML
+            // $(".city").html("<h1>" + response.name + " Weather Details</h1>");
+            // $(".wind").text("Wind Speed: " + response.wind.speed);
+            // $(".humidity").text("Humidity: " + response.main.humidity);
+
+            // // Convert the temp to fahrenheit
+            // var tempF = (response.main.temp - 273.15) * 1.8 + 32;
+
+            // // add temp content to html
+            // $(".temp").text("Temperature (K) " + response.main.temp);
+            // $(".tempF").text("Temperature (F) " + tempF.toFixed(2));
+
+            // // Log the data in the console as well
+            // console.log("Wind Speed: " + response.wind.speed);
+            // console.log("Humidity: " + response.main.humidity);
+            // console.log("Temperature (F): " + tempF);
+        });
 });
