@@ -18,49 +18,51 @@ var date = moment().format("MMM Do YYYY");
 
 var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
 
-// Here we are building the URL we need to query the database
-
+// Listening for the click on the search button to initiate the AJAX call to the API
 $("#search-button").on("click", function (event) {
     event.preventDefault()
     var cityName = $("#input-city").val();
-
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
-
+    var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
-        url: queryURL,
+        url: weatherQueryURL,
         method: "GET"
     })
         // We store all of the retrieved data inside of an object called "response"
         .then(function (response) {
             console.log(response)
+            // assign values from API call to variables
             var cityDisplay = response.name;
             var iconCode = response.weather[0].icon;
             var iconUrl = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
             var humidity = response.main.humidity;
-            var windSpeed = (parseFloat(response.wind.speed) * 2.237);
+            var windSpeed = (response.wind.speed * 2.237);
+            var temp = (response.main.temp - 273.15) * 1.8 + 32;
+            var lat = response.coord.lat;
+            var lon = response.coord.lon;
 
+            var uvQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lat + "&appid=" + APIKey;
+            if (lat !== null && lon !== null) {
 
-            $("#weather-day").text(cityDisplay + " - " + date);
-            $("#weather-icon").attr("src", iconUrl);
-            $("#current-humidity").text(humidity);
-            $("#current-wind").text(windSpeed);
-            $("#weather-div").attr("class", "col-8 d-block")
-            // // Transfer content to HTML
-            // $(".city").html("<h1>" + response.name + " Weather Details</h1>");
-            // $(".wind").text("Wind Speed: " + response.wind.speed);
-            // $(".humidity").text("Humidity: " + response.main.humidity);
+                $.ajax({
+                    url: uvQueryURL,
+                    method: "GET"
+                })
+                    // We store all of the retrieved data inside of an object called "response"
+                    .then(function (uvResponse) {
+                        var uvIndex = uvResponse.value
+                        $("#current-uvIndex").text(uvIndex);
 
-            // // Convert the temp to fahrenheit
-            // var tempF = (response.main.temp - 273.15) * 1.8 + 32;
+                    });
 
-            // // add temp content to html
-            // $(".temp").text("Temperature (K) " + response.main.temp);
-            // $(".tempF").text("Temperature (F) " + tempF.toFixed(2));
-
-            // // Log the data in the console as well
-            // console.log("Wind Speed: " + response.wind.speed);
-            // console.log("Humidity: " + response.main.humidity);
-            // console.log("Temperature (F): " + tempF);
+                // add text to weather fields
+                $("#weather-day").text(cityDisplay + " - " + date);
+                $("#weather-icon").attr("src", iconUrl);
+                $("#current-temp").text(temp.toFixed(1));
+                $("#current-humidity").text(humidity);
+                $("#current-wind").text(windSpeed.toFixed(1));
+                $("#weather-div").attr("class", "col-8 d-block")
+            };
         });
 });
+
