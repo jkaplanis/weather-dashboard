@@ -20,16 +20,20 @@
             <h1>Weather Dashboard</h1>
         </div>
     </header>
-    <!-- <section class="container"> -->
+    <section class="container-fluid">
     <div class="row">
-        <div class="col-4" id="search-history">
+        <div class="col-4">
             <form class="form-inline d-flex justify-content-start">
                 <div class="form-group mb-2">
                     <label for="searchInput" class="sr-only">City Name</label>
                     <input type="text" class="form-control" id="input-city" placeholder="City Name">
                 </div>
                 <button type="submit" class="btn btn-primary mb-2" id="search-button">Search</button>
+                <div id="search-history" >
+
+                </div>
             </form>
+            
         </div>
         <div id="weather-div" class="col-8 d-none">
             <div class="row">
@@ -44,45 +48,50 @@
             <h2 id="5-day-forecast">5-Day Forecast:</h2>
             <div class="row">
                 <div class="col text-white">
-                    <div class="card bg-primary" style="max-width: 14rem;">Hello Again 
-                        <img class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
-                        <p>Temp:</p>
-                        <p>Humidity:</p>
+                    <div class="card bg-primary" style="max-width: 14rem;">
+                        <p id="date1" class="mb-2"></p>
+                        <img id="icon1" class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
+                        <p>Temp: <span id="day1-temp"></span>&deg; F</p>
+                        <p>Humidity: <span id="day1-humidity"></span>%</p>
                     </div>
                 </div>
                 <div class="col text-white">
-                    <div class="card bg-primary" style="max-width: 14rem;">Hello Again 
-                        <img class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
-                        <p>Temp:</p>
-                        <p>Humidity:</p>
+                    <div class="card bg-primary" style="max-width: 14rem;">
+                        <p id="date2" class="mb-2"></p>
+                        <img id="icon2" class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
+                        <p>Temp: <span id="day2-temp"></span>&deg; F</p>
+                        <p>Humidity: <span id="day2-humidity"></span>%</p>
                     </div>
                 </div>
                 <div class="col text-white">
-                    <div class="card bg-primary" style="max-width: 14rem;">Hello Again 
-                        <img class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
-                        <p>Temp:</p>
-                        <p>Humidity:</p>
+                    <div class="card bg-primary" style="max-width: 14rem;">
+                        <p id="date3" class="mb-2"></p>
+                        <img id="icon3" class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
+                        <p>Temp: <span id="day3-temp"></span>&deg; F</p>
+                        <p>Humidity: <span id="day3-humidity"></span>%</p>
                     </div>
                 </div>
                 <div class="col text-white">
-                    <div class="card bg-primary" style="max-width: 14rem;">Hello Again 
-                        <img class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
-                        <p>Temp:</p>
-                        <p>Humidity:</p>
+                    <div class="card bg-primary" style="max-width: 14rem;">
+                        <p id="date4" class="mb-2"></p>
+                        <img id="icon4" class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
+                        <p>Temp: <span id="day4-temp"></span>&deg; F</p>
+                        <p>Humidity: <span id="day4-humidity"></span>%</p>
                     </div>
                 </div>
                 <div class="col text-white">
-                    <div class="card bg-primary" style="max-width: 14rem;">Hello Again 
-                        <img class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
-                        <p>Temp:</p>
-                        <p>Humidity:</p>
+                    <div class="card bg-primary" style="max-width: 14rem;">
+                        <p id="date5" class="mb-2"></p>
+                        <img id="icon5" class="mr-auto" src="http://openweathermap.org/img/w/01n.png" alt="weather icon">
+                        <p>Temp: <span id="day5-temp"></span>&deg; F</p>
+                        <p>Humidity: <span id="day5-humidity"></span>%</p>
                     </div>
                 </div>
               
             </div>
         </div>
     </div>
-    <!-- </section> -->
+    </section>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

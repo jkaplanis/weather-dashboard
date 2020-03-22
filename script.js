@@ -42,36 +42,56 @@ $("#search-button").on("click", function (event) {
             var lon = response.coord.lon;
 
             var uvQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
-            if (lat !== null && lon !== null) {
 
-                $.ajax({
-                    url: uvQueryURL,
-                    method: "GET"
-                })
-                    // We store all of the retrieved data inside of an object called "response"
-                    .then(function (uvResponse) {
-                        console.log(uvResponse)
-                        var uvIndex = uvResponse.value
-                        $("#current-uvIndex").text(uvIndex);
-                        if (uvIndex <= 4){
-                            $("#current-uvIndex").attr("class", "bg-success")
-                        }
-                        else if (uvIndex >= 4.01 && uvIndex <= 7){
-                            $("#current-uvIndex").attr("class", "bg-warning")
-                        }
-                        else {
-                            $("#current-uvIndex").attr("class", "bg-danger")
-                        }
-                    });
+            $.ajax({
+                url: uvQueryURL,
+                method: "GET"
+            })
+                // We store all of the retrieved data inside of an object called "uvResponse"
+                .then(function (uvResponse) {
+                    var uvIndex = uvResponse.value
+                    $("#current-uvIndex").text(uvIndex);
 
-                // add text to weather fields
-                $("#weather-day").text(cityDisplay + " - " + date);
-                $("#weather-icon").attr("src", iconUrl);
-                $("#current-temp").text(temp.toFixed(1));
-                $("#current-humidity").text(humidity);
-                $("#current-wind").text(windSpeed.toFixed(1));
-                $("#weather-div").attr("class", "col-8 d-block")
-            };
+                    // Assign color based on uv Index severity
+                    if (uvIndex <= 4) {
+                        $("#current-uvIndex").attr("class", "bg-success") //green
+                    }
+                    else if (uvIndex >= 4.01 && uvIndex <= 7) {
+                        $("#current-uvIndex").attr("class", "bg-warning") //yellow
+                    }
+                    else {
+                        $("#current-uvIndex").attr("class", "bg-danger") //red
+                    }
+                });
+
+            // add text to weather fields
+            $("#weather-day").text(cityDisplay + " - " + date);
+            $("#weather-icon").attr("src", iconUrl);
+            $("#current-temp").text(temp.toFixed(1));
+            $("#current-humidity").text(humidity);
+            $("#current-wind").text(windSpeed.toFixed(1));
+            $("#weather-div").attr("class", "col-8 d-block")
+            $("#search-history").prepend($("<button>").attr("class", "btn btn-light").text(cityDisplay));
+        });
+    // query url for the 5 day forecast
+    var fiveDayQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey;
+
+    $.ajax({
+        url: fiveDayQueryURL,
+        method: "GET"
+    })
+        // We store all of the retrieved data inside of an object called "uvResponse"
+        .then(function (fiveDayResponse) {
+            console.log(fiveDayResponse)
+            for (var i = 1; i < 6; i++) {
+                var futureDate = moment().add(i, 'days').format("MM/DD/YYYY");
+                var dayIcon = fiveDayResponse.list[i].weather[0].icon;
+                var dayTemp = fiveDayResponse.list[i].main.temp;
+                var dayHumidity = fiveDayResponse.list[i].main.humidity;
+                $("#date" + i).text(futureDate);
+                $("#icon" + i).attr("src", "http://openweathermap.org/img/w/" + dayIcon + ".png");
+                $("#day" + i + "-temp").text(dayTemp);
+                $("#day" + i + "-humidity").text(dayHumidity);
+            }
         });
 });
-
