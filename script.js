@@ -30,7 +30,6 @@ $("#search-button").on("click", function (event) {
     })
         // We store all of the retrieved data inside of an object called "response"
         .then(function (response) {
-            console.log(response)
             // assign values from API call to variables
             var cityDisplay = response.name;
             var iconCode = response.weather[0].icon;
@@ -41,7 +40,7 @@ $("#search-button").on("click", function (event) {
             var lat = response.coord.lat;
             var lon = response.coord.lon;
 
-            var uvQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lat + "&appid=" + APIKey;
+            var uvQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
             if (lat !== null && lon !== null) {
 
                 $.ajax({
@@ -50,9 +49,18 @@ $("#search-button").on("click", function (event) {
                 })
                     // We store all of the retrieved data inside of an object called "response"
                     .then(function (uvResponse) {
+                        console.log(uvResponse)
                         var uvIndex = uvResponse.value
                         $("#current-uvIndex").text(uvIndex);
-
+                        if (uvIndex <= 4){
+                            $("#current-uvIndex").attr("class", "bg-success")
+                        }
+                        else if (uvIndex >= 4.01 && uvIndex <= 7){
+                            $("#current-uvIndex").attr("class", "bg-warning")
+                        }
+                        else {
+                            $("#current-uvIndex").attr("class", "bg-danger")
+                        }
                     });
 
                 // add text to weather fields
