@@ -70,27 +70,33 @@ $("#search-button").on("click", function (event) {
             $("#current-temp").text(temp.toFixed(1));
             $("#current-humidity").text(humidity);
             $("#current-wind").text(windSpeed.toFixed(1));
-            $("#weather-div").attr("class", "col-8 d-block")
             $("#search-history").prepend($("<button>").attr("class", "btn btn-light").text(cityDisplay));
         });
-    // query url for the 5 day forecast
-    var fiveDayQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey;
-
-    $.ajax({
-        url: fiveDayQueryURL,
-        method: "GET"
-    })
+        // query url for the 5 day forecast
+        var fiveDayQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey;
+        
+        $.ajax({
+            url: fiveDayQueryURL,
+            method: "GET"
+        })
         // We store all of the retrieved data inside of an object called "uvResponse"
         .then(function (fiveDayResponse) {
-            for (var i = 1; i < 6; i++) {
+            // for loop to add dates to 5 day forecast
+            for (var i = 1; i < 6; i++){
                 var futureDate = moment().add(i, 'days').format("MM/DD/YYYY");
+                $("#date" + i).text(futureDate);
+            };
+            // for loop to add weather details for 5 day forecast
+            // fiveDayResponse returns weather for every 3 hours, incrementing by 8
+            // ensures we pull data from a new day each iteration. 
+            for (var i = 4; i < 37; i += 8) {
                 var dayIcon = fiveDayResponse.list[i].weather[0].icon;
                 var dayTemp = fiveDayResponse.list[i].main.temp;
                 var dayHumidity = fiveDayResponse.list[i].main.humidity;
-                $("#date" + i).text(futureDate);
                 $("#icon" + i).attr("src", "http://openweathermap.org/img/w/" + dayIcon + ".png");
                 $("#day" + i + "-temp").text(dayTemp);
                 $("#day" + i + "-humidity").text(dayHumidity);
             }
+            $("#weather-div").attr("class", "col-8 d-block")
         });
 });
