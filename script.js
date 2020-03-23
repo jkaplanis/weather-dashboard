@@ -22,7 +22,7 @@ var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
 $("#search-button").on("click", function (event) {
     event.preventDefault()
     var cityName = $("#input-city").val();
-    var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey;
+    var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=" + APIKey;
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
         url: weatherQueryURL,
@@ -30,16 +30,16 @@ $("#search-button").on("click", function (event) {
     })
         // We store all of the retrieved data inside of an object called "response"
         .then(function (response) {
-            console.log(response)
             // assign values from API call to variables
             var cityDisplay = response.name;
             var iconCode = response.weather[0].icon;
             var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
             var humidity = response.main.humidity;
-            var windSpeed = (response.wind.speed * 2.237);
-            var temp = (response.main.temp - 273.15) * 1.8 + 32;
+            var windSpeed = (response.wind.speed);
+            var temp = (response.main.temp);
             var lat = response.coord.lat;
             var lon = response.coord.lon;
+            $("#input-city").val('');
 
             var uvQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
 
@@ -82,7 +82,6 @@ $("#search-button").on("click", function (event) {
     })
         // We store all of the retrieved data inside of an object called "uvResponse"
         .then(function (fiveDayResponse) {
-            console.log(fiveDayResponse)
             for (var i = 1; i < 6; i++) {
                 var futureDate = moment().add(i, 'days').format("MM/DD/YYYY");
                 var dayIcon = fiveDayResponse.list[i].weather[0].icon;
