@@ -1,19 +1,15 @@
-/* When the search is entered
-Then the city name and the current date appear to the right in an H1 along with an icon
-The following items are below this in a p tag: 
-temperature in F
-humidity percentage
-wind speed in mph
-The UV index which should be color coded based on severity (favorable, moderate, severe)
-    
-The 5 day forcast appears below todays info, this will have
-"5 day forecast:" in an h2 and each boc will contain the date, 
-an icon to represent the weather, the temp, and the humidity
+var citySearchHistory = JSON.parse(localStorage.getItem("searchHistory"));
 
-The seach city will also be saved below the search box available to be clicked later
+if (citySearchHistory === null) {
+    citySearchHistory = [];
+}
 
-When the page is reloaded
-Then all of the saved searches will appear and the last search will be presented*/
+for (var i = 0; i < citySearchHistory.length; i++) {
+    var cityHistoryDisplay = citySearchHistory[i]
+    $("#search-history").prepend($("<button>").attr("class", "btn btn-light").text(cityHistoryDisplay));
+}
+
+
 var date = moment().format("MMM Do YYYY");
 
 var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
@@ -32,11 +28,13 @@ $("#search-button").on("click", function (event) {
         .then(function (response) {
             // assign values from API call to variables
             var cityDisplay = response.name;
+            citySearchHistory.push(cityDisplay);
+            localStorage.setItem("searchHistory", JSON.stringify(citySearchHistory));
             var iconCode = response.weather[0].icon;
             var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
             var humidity = response.main.humidity;
             var windSpeed = (response.wind.speed);
-            var temp = (response.main.temp);
+            var temp = response.main.temp;
             var lat = response.coord.lat;
             var lon = response.coord.lon;
             $("#input-city").val('');
@@ -72,17 +70,17 @@ $("#search-button").on("click", function (event) {
             $("#current-wind").text(windSpeed.toFixed(1));
             $("#search-history").prepend($("<button>").attr("class", "btn btn-light").text(cityDisplay));
         });
-        // query url for the 5 day forecast
-        var fiveDayQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey;
-        
-        $.ajax({
-            url: fiveDayQueryURL,
-            method: "GET"
-        })
+    // query url for the 5 day forecast
+    var fiveDayQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey;
+
+    $.ajax({
+        url: fiveDayQueryURL,
+        method: "GET"
+    })
         // We store all of the retrieved data inside of an object called "uvResponse"
         .then(function (fiveDayResponse) {
             // for loop to add dates to 5 day forecast
-            for (var i = 1; i < 6; i++){
+            for (var i = 1; i < 6; i++) {
                 var futureDate = moment().add(i, 'days').format("MM/DD/YYYY");
                 $("#date" + i).text(futureDate);
             };
