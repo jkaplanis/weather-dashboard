@@ -1,10 +1,16 @@
+// API key for open weather
 var APIKey = "c6e0e3fb545da16f65b665f11bf65c91";
+
+// Pull recent search history from local storage and add it to array
 var citySearchHistory = JSON.parse(localStorage.getItem("searchHistory"));
 
+// If nothing saved in local storage, create an array to hold searches
 if (citySearchHistory === null) {
     citySearchHistory = [];
 }
-if (citySearchHistory.length > 0){
+
+// If array is not empty, prepend search history to search history div and call render weather
+if (citySearchHistory.length > 0) {
     for (var i = 0; i < citySearchHistory.length; i++) {
         var cityHistoryDisplay = citySearchHistory[i];
         $("#search-history").prepend($("<button>").attr("class", "btn btn-light").text(cityHistoryDisplay));
@@ -13,10 +19,11 @@ if (citySearchHistory.length > 0){
     renderWeather(cityName);
 }
 
+// Save current date to a variable
 var date = moment().format("MMM Do YYYY");
 
-
-// Listening for the click on the search button to initiate the AJAX call to the API
+// Listen for click on the search button
+// Push search value to array, set item to local storage, and call render weather function
 $("#search-button").on("click", function (event) {
     event.preventDefault();
     var cityName = $("#input-city").val();
@@ -26,6 +33,7 @@ $("#search-button").on("click", function (event) {
     renderWeather(cityName);
 });
 
+// Listen for click on item in search history and call function render weather
 $("#search-history").on("click", function (event) {
     event.preventDefault();
     var cityName = $(event.target).text();
@@ -33,14 +41,14 @@ $("#search-history").on("click", function (event) {
 })
 
 // Here we run our AJAX call to the OpenWeatherMap API
-function renderWeather(cityName){
-    
+function renderWeather(cityName) {
+
     var weatherQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=" + APIKey;
     $.ajax({
         url: weatherQueryURL,
         method: "GET"
     })
-        // We store all of the retrieved data inside of an object called "response"
+        // Stored return object in response
         .then(function (response) {
             // assign values from API call to variables
             var cityDisplay = response.name;
@@ -52,9 +60,11 @@ function renderWeather(cityName){
             var lat = response.coord.lat;
             var lon = response.coord.lon;
             $("#input-city").val('');
-    
+
+            // query url for UV Incdex
             var uvQueryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
-    
+
+            // second AJAX call to get UV Index using lat/lon
             $.ajax({
                 url: uvQueryURL,
                 method: "GET"
@@ -63,7 +73,7 @@ function renderWeather(cityName){
                 .then(function (uvResponse) {
                     var uvIndex = uvResponse.value
                     $("#current-uvIndex").text(uvIndex);
-    
+
                     // Assign color based on uv Index severity
                     if (uvIndex <= 4) {
                         $("#current-uvIndex").attr("class", "bg-success") //green
@@ -75,7 +85,7 @@ function renderWeather(cityName){
                         $("#current-uvIndex").attr("class", "bg-danger") //red
                     }
                 });
-    
+
             // add text to weather fields
             $("#weather-day").text(cityDisplay + " - " + date);
             $("#weather-icon").attr("src", iconUrl);
@@ -83,9 +93,10 @@ function renderWeather(cityName){
             $("#current-humidity").text(humidity);
             $("#current-wind").text(windSpeed.toFixed(1));
         });
+
     // query url for the 5 day forecast
     var fiveDayQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + APIKey;
-    
+
     $.ajax({
         url: fiveDayQueryURL,
         method: "GET"
@@ -108,6 +119,7 @@ function renderWeather(cityName){
                 $("#day" + i + "-temp").text(dayTemp);
                 $("#day" + i + "-humidity").text(dayHumidity);
             }
+            // Allow weather data to be displayed
             $("#weather-div").attr("class", "col-8 d-block")
         });
 };

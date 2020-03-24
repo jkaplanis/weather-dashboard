@@ -14,13 +14,16 @@
 </head>
 
 <body>
+    <!-- Title Header -->
     <header>
         <div class="container-fluid"
             style="background-color: rgb(32, 42, 75); color:white; text-align: center; padding-top: 30px; padding-bottom: 30px">
             <h1>Weather Dashboard</h1>
         </div>
     </header>
+
     <section class="container-fluid">
+        <!-- Search box and search history -->
         <div class="row">
             <div class="col-4">
                 <form class="form-inline d-flex justify-content-start">
@@ -33,6 +36,7 @@
                 <div id="search-history" class="btn-group-vertical w-100 justify-content-start">
                 </div>
             </div>
+            <!-- Current weather box -->
             <div id="weather-div" class="col-8 d-none">
                 <div class="row">
                     <div class="col border">
@@ -43,6 +47,7 @@
                         <p>UV Index: <span id="current-uvIndex"></span></p>
                     </div>
                 </div>
+                <!-- 5 day forecast -->
                 <h2 id="5-day-forecast">5-Day Forecast:</h2>
                 <div class="row">
                     <div class="col text-white">
