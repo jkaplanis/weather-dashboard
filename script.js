@@ -8,7 +8,26 @@ var citySearchHistory = JSON.parse(localStorage.getItem("searchHistory"));
 if (citySearchHistory === null) {
   citySearchHistory = [];
 }
-updateSearchHistory();
+
+// Save current date to a variable
+var date = moment().format("MMM Do YYYY");
+
+// Listen for click on the search button
+// Push search value to array, set item to local storage, and call render weather function
+$("#search-button").on("click", function (event) {
+  event.preventDefault();
+  var cityName = $("#input-city").val();
+  updateLocalStorage(cityName);
+  updateSearchHistory();
+});
+
+// Listen for click on item in search history and call function render weather
+$("#search-history").on("click", function (event) {
+  event.preventDefault();
+  var cityName = $(event.target).text();
+  updateLocalStorage(cityName);
+  updateSearchHistory();
+});
 
 // If array is not empty, prepend search history to search history div and call render weather
 function updateSearchHistory() {
@@ -25,32 +44,15 @@ function updateSearchHistory() {
   }
 }
 
-// Save current date to a variable
-var date = moment().format("MMM Do YYYY");
-
-// Listen for click on the search button
-// Push search value to array, set item to local storage, and call render weather function
-$("#search-button").on("click", function (event) {
-  event.preventDefault();
-  var cityName = $("#input-city").val();
-
-  //if search exists in local storage, remove it and readd
+//if search exists in local storage, remove it and re-add
+function updateLocalStorage(cityName) {
   var position = citySearchHistory.indexOf(cityName);
   if (position !== -1) {
     citySearchHistory.splice(position, 1);
   }
-
   citySearchHistory.push(cityName);
   localStorage.setItem("searchHistory", JSON.stringify(citySearchHistory));
-  updateSearchHistory();
-});
-
-// Listen for click on item in search history and call function render weather
-$("#search-history").on("click", function (event) {
-  event.preventDefault();
-  var cityName = $(event.target).text();
-  renderWeather(cityName);
-});
+}
 
 // Here we run our AJAX call to the OpenWeatherMap API
 function renderWeather(cityName) {
@@ -149,3 +151,5 @@ function renderWeather(cityName) {
       $("#weather-div").attr("class", "col-8 d-block");
     });
 }
+
+updateSearchHistory();
