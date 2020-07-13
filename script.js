@@ -21,6 +21,14 @@ $("#search-button").on("click", function (event) {
   updateSearchHistory();
 });
 
+// Listen for click on the search button
+// Push search value to array, set item to local storage, and call render weather function
+$("#clear-button").on("click", function (event) {
+  event.preventDefault();
+  $("#search-history").empty();
+  localStorage.clear();
+});
+
 // Listen for click on item in search history and call function render weather
 $("#search-history").on("click", function (event) {
   event.preventDefault();

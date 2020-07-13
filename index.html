@@ -40,7 +40,10 @@
       <!-- Search box and search history -->
       <div class="row">
         <div class="col-4">
-          <form class="form-inline d-flex justify-content-start">
+          <form
+            id="search-form"
+            class="form-inline d-flex justify-content-start"
+          >
             <div class="form-group m-2">
               <label for="searchInput" class="sr-only">City Name</label>
               <input
@@ -56,6 +59,13 @@
               id="search-button"
             >
               Search
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger btn-sm btn-block my-2"
+              id="clear-button"
+            >
+              Clear History
             </button>
           </form>
           <div
