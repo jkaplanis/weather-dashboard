@@ -46,7 +46,10 @@ function updateSearchHistory() {
 
 //if search exists in local storage, remove it and re-add
 function updateLocalStorage(cityName) {
-  var position = citySearchHistory.indexOf(cityName);
+  var lowerCaseCityArray = citySearchHistory.map(city => {
+    return city.toLowerCase();
+  });
+  var position = lowerCaseCityArray.indexOf(cityName.toLowerCase());
   if (position !== -1) {
     citySearchHistory.splice(position, 1);
   }
